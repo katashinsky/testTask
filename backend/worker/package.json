@@ -1,0 +1,23 @@
+{
+  "name": "stock_scanner_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon build/worker.js AAPL",
+    "tsc:watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.5",
+    "axios": "^0.19.2",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.5.13",
+    "@types/express": "^4.17.6",
+    "@types/node": "^13.13.4"
+  }
+}

@@ -1,0 +1,28 @@
+<div class="main">
+    <form class="example-form" [formGroup]="stockForm">
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Select an option</mat-label>
+            <mat-select value="selected" formControlName="stockName">
+              <mat-option>None</mat-option>
+              <mat-option value="FB">FB</mat-option>
+              <mat-option value="AAPL">AAPL</mat-option>
+              <mat-option value="IBM">IBM</mat-option>
+              <mat-option value="AMZN">AMZN</mat-option>
+              <mat-option value="DIS">DIS</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="StockPrice" formControlName="stockPrice">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Choose stock date</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="stockDate">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+        </mat-form-field>
+        <button mat-flat-button color="primary" class="form-button" (click)="trade()">Trade</button>
+    </form>
+</div>

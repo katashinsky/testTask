@@ -1,0 +1,21 @@
+<div class="topbar">
+    <div class="start">
+        <span class="logo">ShopTemplate</span>
+    </div>
+    <div class="finish">
+        <div class="other">
+            <div class="topbar-item" *ngIf="(authState | async).authenticated" routerLink="/stocks">
+                <span class="topBarData">Stocks</span>
+            </div>
+            <div class="topbar-item" *ngIf="(authState | async).authenticated" routerLink="/graph">
+                <span class="topBarData">Graph</span>
+            </div>
+        </div>
+        <div class="topbar-item" (click)="onLogin()">
+            <span *ngIf="login === true; else signUpBlock" class="topBarData" routerLink="/signup">Login</span>
+            <ng-template #signUpBlock>
+                <span class="topBarData" routerLink="/login">SingUp</span>
+            </ng-template>
+        </div>
+    </div>
+</div>
