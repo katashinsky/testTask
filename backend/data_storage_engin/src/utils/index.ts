@@ -51,7 +51,7 @@ class Utils {
 
                 channel.consume(queue, (msg: amqp.Message | null) => {
                     if (msg) {
-                        this.__recordService.saveRecord(<IRecord>JSON.parse(msg.content.toString()))
+                        this.__recordService.saveRecord(JSON.parse(msg.content.toString()))
                             .then((res: IRecord) => {
                                 channel.ack(msg);
                                 console.log(" [x] Received STOCKS %s", JSON.stringify(JSON.parse(msg.content.toString()), null, 3));

@@ -5,7 +5,6 @@ const Schema = mongoose.Schema
 export interface IRecord extends mongoose.Document {
     userId: string,
     status: string,
-    requestDate: string,
     currentPrice: string,
     requestDM: number,
     userPrise: string,
@@ -39,11 +38,6 @@ const recordSchema = new Schema({
         required: true,
     },
 
-    requestDate: {
-        type: String,
-        required: true,
-    },
-
     requestDM: {
         type: Number,
         required: true,
@@ -54,7 +48,7 @@ const recordSchema = new Schema({
         required: true,
     },
 
-    userPrise: {
+    userPrice: {
         type: String,
         required: true,
     },

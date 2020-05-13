@@ -1,30 +1,9 @@
-import {connect, Connection, Channel, Message} from 'amqplib/callback_api';
-import axios from "axios"
-import {API_KEY, EXIST, NOT_EXIST, STOCKS_ARRAY, META_DATA, TS_DAILY, SYMBOL} from "../config"
-import { type } from 'os';
+import { Channel, connect, Connection } from 'amqplib/callback_api';
+import axios from "axios";
+import { UserData } from '../common/entity';
+import { API_KEY, META_DATA, SYMBOL, TS_DAILY } from "../config";
 
-type Price = {
-    open: string,
-    high: string,
-    low: string,
-    close: string,
-    volume: string
-}
-
-type Stock = {
-    stockName: string,
-    date: string,
-    dateMillisecond: number,
-    price: {
-        open: string,
-        high: string,
-        low: string,
-        close: string,
-        volume: string,
-    }
-}
-
-export let sendToQueue = (data: {date: string, type: string, userPrice: number, userId: string} | Array<Stock>, type: string) => {
+export let sendToQueue = (data: UserData | Array<Stock>, type: string) => {
     
     connect('amqp://localhost', function(error0: any, connection: Connection) {
         if (error0) throw error0 
@@ -52,21 +31,15 @@ export let sendToQueue = (data: {date: string, type: string, userPrice: number, 
 }
 
 export let checkIfExist = async (stocksArray: Array<string>) => {
-    let requestsArray = stocksArray.map(item => {
-        return request(item)
-    })
 
     try {
         let reqArr: Array<Promise<any>> = [];
+          
+        reqArr.push(requestStocksData(stocksArray[1], API_KEY))               
 
-        let results = (await Promise.all(requestsArray)).map(item => item.data)
-            if(results.length === 0){
-                reqArr.push(requestStocksData(stocksArray[1], API_KEY))               
-            }
-
-        // let stocksData = (await Promise.all(reqArr)).map(item => item.data)
-        // sendToQueue(parseData(stocksData), "RECORDS")
-        // console.log("DATA ___ ", parseData(stocksData)[0].stockName)
+        let stocksData = (await Promise.all(reqArr)).map(item => item.data)
+        sendToQueue(parseData(stocksData), "RECORDS")
+        console.log("DATA ___ ", parseData(stocksData)[0].stockName)
     } catch (error) {
         console.log(error)        
     }

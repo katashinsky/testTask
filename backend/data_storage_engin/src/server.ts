@@ -28,7 +28,7 @@ app.get('/', async (req, res, next) => {
     res.send("ok")
 })
 
-mongoose.connect("mongodb://localhost:27017/testDB", {useUnifiedTopology: true, useNewUrlParser: true})
+mongoose.connect("mongodb+srv://dmitriy:DIMON4523@cluster0-0ato1.mongodb.net/test?retryWrites=true&w=majority", {useUnifiedTopology: true, useNewUrlParser: true})
     .then(result => {
         console.log('========SUCCESS========')
         utils.startChannel()

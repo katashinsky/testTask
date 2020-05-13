@@ -1,6 +1,8 @@
 import * as express from 'express'
-import { STOCKS_ARRAY } from "./config"
+import { STOCKS_ARRAY, SECRET_KEY } from "./config"
 import { checkIfExist, sendToQueue } from "./utils"
+import * as CryptoJS from "crypto-js"
+import {UserData} from "./common/entity"
 
 const app: express.Application = express()
 
@@ -17,13 +19,15 @@ app.use((req, res, next) => {
 
 app.get('/', async (req, res, next) => {
     let {type, date, userPrice, userId} = req.query
-    console.log(type, date)
-    sendToQueue({date: date.toString(), type: type.toString(), userPrice: parseFloat(userPrice.toString()), userId: userId.toString()}, type.toString())
+
+    let data = new UserData(date.toString(), type.toString(), userPrice.toString(), userId.toString())
+    sendToQueue(data, type.toString())
+
     res.send("ok")
 }) 
 
 app.listen(3000 , () => {
-    checkIfExist(STOCKS_ARRAY)
+    // checkIfExist(STOCKS_ARRAY)
     console.log(`Server is running in localhost port 3000`)
 })
 
