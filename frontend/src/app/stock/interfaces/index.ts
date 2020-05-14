@@ -9,13 +9,21 @@ export interface Stocks {
         close: string,
         volume: string,
     }
-  }
+}
   
-  export interface FilterData {
-      stockName: string,
-      dateFrom: number,
-      dateTo: number,
-  }
+export interface FilterData {
+    stockName: Array<string>,
+    dateFrom: number,
+    dateTo: number,
+}
+
+export interface StocksData {
+    FB?: Array<Stocks>,
+    AAPL?: Array<Stocks>,
+    IBM?: Array<Stocks>,
+    AMZN?: Array<Stocks>,
+    DIS?: Array<Stocks>,
+}
   
   
   

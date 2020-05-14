@@ -13,11 +13,22 @@ export class RecordsService {
         return await Records.findOne({[field]: value})
     }
 
-    public async findByNameAndDate(name: string, dateFrom: number, dateTo: number, hashkey?: string): Promise<Array<IRecords>> {
-        let arr = await Records.find({stockName: name, dateMillisecond: {$gt: dateFrom, $lt: dateTo}})
-        if(hashkey) client.set(hashkey, JSON.stringify(arr))
-      
-        return arr
+    public async findByNameAndDate(stocks: Array<string>, dateFrom: number, dateTo: number, hashkey?: string): Promise<any> {
+        let resultObject: any = {}
+        let promiseArray: Array<any> = []
+
+        stocks.forEach((item: string) => {
+            promiseArray.push(Records.find({stockName: item, dateMillisecond: {$gt: dateFrom, $lt: dateTo}})) 
+        })
+
+        return Promise.all(promiseArray).then(result => {
+            stocks.forEach((item: string, index) => {
+                resultObject[item] = result[index]
+            })
+            if(hashkey) client.set(hashkey, JSON.stringify(resultObject))
+
+            return resultObject
+        })
     }
 }
 

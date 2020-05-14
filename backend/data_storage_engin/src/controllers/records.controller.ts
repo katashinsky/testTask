@@ -14,7 +14,7 @@ export class RecordsController {
     @Cashe
     public async getFilteredDate(req: Request, res: Response, next: NextFunction, hashkey?: string) {
         let {stockName, dateFrom, dateTo} = req.query;
-        res.send(await this._recordsService.findByNameAndDate( stockName.toString(), parseFloat(dateFrom.toString()), parseFloat(dateTo.toString()), hashkey))
+        res.send(await this._recordsService.findByNameAndDate( stockName.toString().split(','), parseFloat(dateFrom.toString()), parseFloat(dateTo.toString()), hashkey))
     }
 }
 

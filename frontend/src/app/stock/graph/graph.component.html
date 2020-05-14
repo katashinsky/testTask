@@ -2,10 +2,20 @@
     <div id="graph"></div>
     <div class="panel">
         <button 
+            [ngStyle]="{'background-color': item.isSelected ? 'rgb(76, 235, 76)' : null}"
             mat-stroked-button 
             class="button" 
             color="primary" 
-            *ngFor="let item of filterList"
+            *ngFor="let item of filterStoksList; let i = index"
+            (click)="chooseStock(i)"
+        >{{item.value}}</button>
+    </div>
+    <div class="panel">
+        <button 
+            mat-stroked-button 
+            class="button" 
+            color="primary" 
+            *ngFor="let item of filterDateList"
             (click)="getGraphData(item.value)"
         >{{item.date}}</button>
     </div>

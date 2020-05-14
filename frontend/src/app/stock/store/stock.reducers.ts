@@ -1,20 +1,26 @@
 import * as StockActions from './stock.actions';
 import { Action, createReducer, on } from '@ngrx/store';
-import {FilterData, Stocks} from "../interfaces"
+import {FilterData, Stocks, StocksData} from "../interfaces"
 
 export interface State {
-  stocksArr: Array<Stocks>
+  data: StocksData
 }
 
 const initialState: State = {
-  stocksArr: []
+  data: {
+    FB: [],
+    AAPL: [],
+    IBM: [],
+    AMZN: [],
+    DIS: [],
+  }
 };
 
 const scoreboardReducer = createReducer(
   initialState,
-  on(StockActions.filterStoks, (state, action: {type: string, payload: Array<Stocks>}) => {
-        console.log("inside Reducer ___ ", action.payload)
-        return {stocksArr: action.payload}
+  on(StockActions.filterStoks, (state, action: {type: string, payload: StocksData}) => {
+      console.log("Records reducer __ ", action.payload)
+      return {data: action.payload}
   }),
 );
 

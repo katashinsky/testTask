@@ -8,6 +8,13 @@ import * as moment from "moment"
 declare let CanvasJS
 
 type Point = {x: Date, y: number}
+type StocksData = {
+  FB?: Array<Point>,
+  AAPL?: Array<Point>,
+  IBM?: Array<Point>,
+  AMZN?: Array<Point>,
+  DIS?: Array<Point>,
+}
 
 @Component({
   selector: 'app-graph',
@@ -18,7 +25,15 @@ export class GraphComponent implements OnInit {
   readonly COUNT_MILISECOND: number = 86400000;
   stockState: Observable<stockreducer.State>;
 
-  filterList: {date: string, value: number}[] = [
+  filterStoksList: Array<{value: string, isSelected: boolean}> = [
+    {value: "FB", isSelected: false}, 
+    {value: "AAPL", isSelected: true}, 
+    {value: "IBM", isSelected: false}, 
+    {value: "AMZN", isSelected: false}, 
+    {value: "DIS", isSelected: false}
+  ]
+
+  filterDateList: {date: string, value: number}[] = [
     {date: "1 week", value: (this.COUNT_MILISECOND * 7)},
     {date: "2 week", value: (this.COUNT_MILISECOND * 14)},
     {date: "1 month", value: (this.COUNT_MILISECOND * 30)},
@@ -34,10 +49,15 @@ export class GraphComponent implements OnInit {
     this.stockState = this.store.select("stock")
     this.stockState.subscribe(newState => {
       console.log("this.stockState.subscribe( __ ", newState)
-      let arr: Point[] = newState.stocksArr.map(item => {
-        return {x: new Date(item.date), y: parseFloat(item.price.high)}
-      })
-      this.loadGraph(arr)
+      let stocksData: StocksData = {};
+      
+      for (const stockName in newState.data) {
+        stocksData[stockName] =  newState.data[stockName].map(item => {
+          return {x: new Date(item.date), y: parseFloat(item.price.high)}
+        })
+      }
+    
+      this.loadGraph(stocksData)
     })
     
   }
@@ -45,10 +65,16 @@ export class GraphComponent implements OnInit {
   getGraphData(amount: number){
     let dateTo: number = new Date(moment(new Date()).format("YYYY-MM-DD")).getTime()
     let dateFrom: number = dateTo - amount
-    this.store.dispatch(StocksActions.tryFilterStocks({payload: {stockName: "AAPL", dateFrom, dateTo}}))
+    let stocksArray = this.filterStoksList.filter(item => item.isSelected === true).map(item => item.value)
+    console.log(stocksArray)
+    this.store.dispatch(StocksActions.tryFilterStocks({payload: {stockName: stocksArray, dateFrom, dateTo}}))
   }
 
-  loadGraph(arr: Point[]){
+  chooseStock(index: number){
+    this.filterStoksList[index].isSelected = !this.filterStoksList[index].isSelected
+  }
+
+  loadGraph(stockData: StocksData){
     var chart = new CanvasJS.Chart("graph", {
       title: {
         text: "stocks Price"
@@ -74,11 +100,47 @@ export class GraphComponent implements OnInit {
       data: [{
         type:"line",
         axisYType: "secondary",
-        name: "Stocks Data",
+        name: "AAPL",
         showInLegend: true,
         markerSize: 0,
         yValueFormatString: "$#,###k",
-        dataPoints: arr
+        dataPoints: stockData.AAPL
+      },
+      {
+        type:"line",
+        axisYType: "secondary",
+        name: "FB",
+        showInLegend: true,
+        markerSize: 0,
+        yValueFormatString: "$#,###k",
+        dataPoints: stockData.FB
+      },
+      {
+        type:"line",
+        axisYType: "secondary",
+        name: "DIS",
+        showInLegend: true,
+        markerSize: 0,
+        yValueFormatString: "$#,###k",
+        dataPoints: stockData.DIS
+      },
+      {
+        type:"line",
+        axisYType: "secondary",
+        name: "AMZN",
+        showInLegend: true,
+        markerSize: 0,
+        yValueFormatString: "$#,###k",
+        dataPoints: stockData.AMZN
+      },
+      {
+        type:"line",
+        axisYType: "secondary",
+        name: "IBM",
+        showInLegend: true,
+        markerSize: 0,
+        yValueFormatString: "$#,###k",
+        dataPoints: stockData.IBM
       },
      ]
     });
