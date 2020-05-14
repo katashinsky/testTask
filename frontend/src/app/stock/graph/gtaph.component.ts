@@ -4,6 +4,7 @@ import {AppState} from "../../store/app.reducers"
 import * as stockreducer from "../store/stock.reducers"
 import { Observable } from 'rxjs';
 import * as StocksActions from "../store/stock.actions"
+import * as moment from "moment"
 declare let CanvasJS
 
 type Point = {x: Date, y: number}
@@ -42,7 +43,7 @@ export class GraphComponent implements OnInit {
   }
 
   getGraphData(amount: number){
-    let dateTo: number = new Date().getTime()
+    let dateTo: number = new Date(moment(new Date()).format("YYYY-MM-DD")).getTime()
     let dateFrom: number = dateTo - amount
     this.store.dispatch(StocksActions.tryFilterStocks({payload: {stockName: "AAPL", dateFrom, dateTo}}))
   }

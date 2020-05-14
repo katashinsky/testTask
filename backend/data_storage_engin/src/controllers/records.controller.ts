@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {recordsService, RecordsService} from "../services/records.service"
 import {IRecords} from "../models/records.model";
+import { Cashe } from '../decorators/cache';
 
 export class RecordsController {
     constructor(private _recordsService: RecordsService) {}
@@ -10,10 +11,10 @@ export class RecordsController {
         res.send(await this._recordsService.findByField("stockName", stockName) ? "exist" : "notExist")
     }
 
-    public async getFilteredDate(req: Request, res: Response, next: NextFunction) {
+    @Cashe
+    public async getFilteredDate(req: Request, res: Response, next: NextFunction, hashkey?: string) {
         let {stockName, dateFrom, dateTo} = req.query;
-        console.log(stockName, dateFrom, dateTo)
-        res.send(await this._recordsService.findByNameAndDate( stockName.toString(), parseFloat(dateFrom.toString()), parseFloat(dateTo.toString())))
+        res.send(await this._recordsService.findByNameAndDate( stockName.toString(), parseFloat(dateFrom.toString()), parseFloat(dateTo.toString()), hashkey))
     }
 }
 

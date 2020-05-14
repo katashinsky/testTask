@@ -4,6 +4,9 @@ import * as mongoose from "mongoose"
 import {apiRouter} from './routes/api.router'
 import * as bodyParser from "body-parser"
 import {utils} from "./utils/index"
+import * as redis from "redis"
+import { REDIS_URL } from './config'
+
 
 require('dotenv').config({path: path.resolve(process.cwd(), '.env')})
 
@@ -38,5 +41,7 @@ mongoose.connect("mongodb+srv://dmitriy:DIMON4523@cluster0-0ato1.mongodb.net/tes
     .catch(err => {
         console.log(err)
     })
+
+export const client: redis.RedisClient = redis.createClient(REDIS_URL)
 
 export default app

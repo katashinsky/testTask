@@ -1,4 +1,5 @@
 import {IRecords, Records} from "../models/records.model";
+import { client } from "../server";
 
 export class RecordsService {
     constructor() {}
@@ -12,8 +13,10 @@ export class RecordsService {
         return await Records.findOne({[field]: value})
     }
 
-    public async findByNameAndDate(name: string, dateFrom: number, dateTo: number): Promise<Array<IRecords>> {
+    public async findByNameAndDate(name: string, dateFrom: number, dateTo: number, hashkey?: string): Promise<Array<IRecords>> {
         let arr = await Records.find({stockName: name, dateMillisecond: {$gt: dateFrom, $lt: dateTo}})
+        if(hashkey) client.set(hashkey, JSON.stringify(arr))
+      
         return arr
     }
 }
