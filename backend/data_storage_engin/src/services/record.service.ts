@@ -1,4 +1,4 @@
-import {IRecord, Record} from "../models/record.model";
+import {IRecord, Record, Status} from "../models/record.model";
 import * as CryptoJS from "crypto-js";
 import {SECRET_KEY} from "../config"
 import { type } from "os";
@@ -13,7 +13,7 @@ export class RecordService {
 
     public async saveRecord(record: any): Promise<IRecord> {
         let extraData: ExtraData = <ExtraData>JSON.parse(CryptoJS.AES.decrypt(record.hashKey, SECRET_KEY).toString(CryptoJS.enc.Utf8))
-        let status = parseFloat(record.data.price.high) < extraData.userPrice ? "win" : "lose";
+        let status: Status = parseFloat(record.data.price.high) < extraData.userPrice ? Status.WIN : Status.LOSE;
                             
         let fullRecord: IRecord = {...extraData, status, ...record.data}
         let newRecord = new Record(fullRecord)

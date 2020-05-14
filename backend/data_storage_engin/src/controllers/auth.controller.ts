@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import {authService, AuthService} from "../services/auth.service"
 import {userService, UserService} from "../services/users.service"
-import { Cashe, Test } from '../decorators/cache';
 
 export class AuthController {
   constructor(private _authService: AuthService, private _userService: UserService) {}

@@ -2,9 +2,14 @@ import * as mongoose from "mongoose"
 
 const Schema = mongoose.Schema
 
+export enum Status {
+    WIN = "win",
+    LOSE = "lose",
+}
+
 export interface IRecord extends mongoose.Document {
     userId: string,
-    status: string,
+    status: Status,
     currentPrice: string,
     requestDM: number,
     userPrise: string,
