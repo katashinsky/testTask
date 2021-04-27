@@ -21,7 +21,7 @@
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.11",
     "object-hash": "^2.0.3",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "uuid": "^8.0.0"
   },
   "devDependencies": {
